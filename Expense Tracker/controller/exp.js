@@ -1,27 +1,35 @@
 const Exp=require('../model/exp')
 const path=require('path')
+//for password encryption
+const bcrypt=require('bcrypt')
 
 exports.OnSignUp=async (req,res,next)=>{
+    try{
     const name=req.body.name;
     const email=req.body.email;
     const password=req.body.password;
 
-    Exp.create({
-        name:name,
-        email:email,
-        password:password
+    //randomize the saltrounds 10 times
+    bcrypt.hash(password,10,async (err,hash)=>{
+        console.log(err)
+        await Exp.create({
+            name:name,
+            email:email,
+            password:hash
+        })
+      //  .then(result=>{
+            res.status(201).json({message:'Successfully created new user'})
+      //  })
     })
-    .then(result=>{
-        res.status(200).json((result))
-    })
-    
-    .catch(err=>{
+    }
+
+    catch(err){
 
         console.log(err)
         //impotant for displaying error on webpage
         res.status(500).json({ error: 'An error occurred.' })
     }
-    )
+    
 }
 
 exports.OnLogin=(req,res,next)=>{
@@ -34,6 +42,19 @@ exports.OnLogin=(req,res,next)=>{
             res.status(404).send('User not found!')
         }
         else{
+
+            bcrypt.compare(password,edata.password,(errp,resp)=>{
+                //console.log(res)
+                if(resp===true){
+                    res.status(200).send('User logged in successfully!')
+                }
+                else{
+                    console.log(errp);
+                    res.status(401).send('User not authorized!')
+                }
+            })
+
+            /*
             Exp.findOne({where:{password:password}})
                 .then(pdata=>{
                     //console.log(edata.password)
@@ -46,6 +67,7 @@ exports.OnLogin=(req,res,next)=>{
                     }
                 })
                 .catch(err1=>console.log(err1))
+                */
         }
         
     })

@@ -79,8 +79,8 @@
                 else{
                     */
                     let res=await axios.post(`http://localhost:3007/signup`,obj)
-                    
-                    if (res.statusText==='OK') {
+                    //console.log(res.data.message)
+                    if (res.data.message==='Successfully created new user') {
                     window.location.href = 'login.html';
                     }
                  
