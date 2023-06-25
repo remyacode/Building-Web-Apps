@@ -53,9 +53,6 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script>
-        var editid=0;
-        var tabid=0;
-       
         async function domfunction(event){
             event.preventDefault(); //to prevent defaults like reload
              
@@ -93,7 +90,7 @@
             }
             catch(err){
                 const errm=document.getElementById('errorMessage')
-                        errm.innerHTML=`<h4>Email already Exists!</h4>`
+                errm.innerHTML=`<h4>Email already Exists!</h4>`
                 console.log(err);
                
                     

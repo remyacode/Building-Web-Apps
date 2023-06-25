@@ -1,7 +1,10 @@
+
+  
 h1{
     text-align: center;
     font-style: bold;
     padding-bottom: 5%;
+    font-family: 'Brush Script MT', cursive;
 }
 .btn{
     background-color:rgb(255, 174, 0);
@@ -26,4 +29,6 @@ label{
 body{
     background-color: rgb(233, 228, 159);
 }
-
+h4{
+    color:red;
+}

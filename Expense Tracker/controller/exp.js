@@ -23,3 +23,31 @@ exports.OnSignUp=async (req,res,next)=>{
     }
     )
 }
+
+exports.OnLogin=(req,res,next)=>{
+    const email=req.body.email;
+    const password=req.body.password;
+
+    Exp.findOne({where:{email:email}})
+    .then(edata=>{
+        if(!edata){
+            res.send('notexist')
+        }
+        else{
+            Exp.findOne({where:{password:password}})
+                .then(pdata=>{
+                    //console.log(edata.password)
+                    //console.log(pdata)
+                    if(pdata==null || edata.password!==pdata.password){
+                        res.send('mismatch')
+                    }
+                    else{
+                        res.status(200).json((edata))
+                    }
+                })
+                .catch(err1=>console.log(err1))
+        }
+        
+    })
+    .catch(err=>console.log(err))
+}

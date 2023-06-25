@@ -17,7 +17,7 @@
     </div>
     <div class="container">
     <section class="container">
-      <form id="my-form" onsubmit="domfunction(event)">
+      <form id="my-form" onsubmit="domfunction2(event)">
 
         <div class="msg"></div>
         <div class="col-12">
@@ -33,8 +33,53 @@
         <button class="btn submit" type="submit">Login</button>
       </form>
       <a href="signup.html">Sign Up for new User</a>
-
+      <div id="errorMessage"></div>
     </section>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+    <script>
+
+        async function domfunction2(event){
+            event.preventDefault(); //to prevent defaults like reload
+
+            const email=event.target.email.value;
+            const password=event.target.password.value;
+
+            const errm=document.getElementById('errorMessage')
+
+            if (password.trim() === '' || email.trim() === '') {
+            // Display error message
+            window.alert('Email and password are mandatory fields.');}
+            else{
+            const obj={
+                email,
+                password
+            }
+            try{
+                    let res=await axios.post(`http://localhost:3007/user/login`,obj)
+                    console.log(res.data)
+                    if(res.data=='notexist'){
+                        errm.innerHTML=`<h4>User does not Exist!</h4>`
+                    }
+                    else if(res.data=='mismatch'){
+                        errm.innerHTML=`<h4>Passwords do not match!</h4>`
+                    }
+                    else{
+                        window.alert('User Logged in successfully!');
+                    }
+                    
+                }
+            catch(err){
+                const errm=document.getElementById('errorMessage')
+                errm.innerHTML=`<h4>Some Error Occured!</h4>`
+                console.log(err);
+            }
+        }
+
+        }
+
+    </script>
+
   </body>
   </html>
