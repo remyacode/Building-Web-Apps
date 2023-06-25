@@ -31,7 +31,7 @@ exports.OnLogin=(req,res,next)=>{
     Exp.findOne({where:{email:email}})
     .then(edata=>{
         if(!edata){
-            res.send('notexist')
+            res.status(404).send('User not found!')
         }
         else{
             Exp.findOne({where:{password:password}})
@@ -39,7 +39,7 @@ exports.OnLogin=(req,res,next)=>{
                     //console.log(edata.password)
                     //console.log(pdata)
                     if(pdata==null || edata.password!==pdata.password){
-                        res.send('mismatch')
+                        res.status(401).send('User not authorized!')
                     }
                     else{
                         res.status(200).json((edata))

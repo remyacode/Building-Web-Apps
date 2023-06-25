@@ -39,7 +39,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script>
-
+        
         async function domfunction2(event){
             event.preventDefault(); //to prevent defaults like reload
 
@@ -58,21 +58,23 @@
             }
             try{
                     let res=await axios.post(`http://localhost:3007/user/login`,obj)
-                    console.log(res.data)
-                    if(res.data=='notexist'){
-                        errm.innerHTML=`<h4>User does not Exist!</h4>`
-                    }
-                    else if(res.data=='mismatch'){
-                        errm.innerHTML=`<h4>Passwords do not match!</h4>`
-                    }
-                    else{
-                        window.alert('User Logged in successfully!');
-                    }
+                    window.alert('User Logged in successfully!');
+                    
                     
                 }
             catch(err){
                 const errm=document.getElementById('errorMessage')
-                errm.innerHTML=`<h4>Some Error Occured!</h4>`
+                
+                //console.log(err.response.data) 
+                if(err.response.data=='User not found!'){
+                        errm.innerHTML=`<h4>User does not Exist!</h4>`
+                    }
+                else if(err.response.data=='User not authorized!'){
+                        errm.innerHTML=`<h4>Passwords do not match!</h4>`
+                    }
+                else{
+                    errm.innerHTML=`<h4>Some Error Occured!</h4>`
+                }
                 console.log(err);
             }
         }
