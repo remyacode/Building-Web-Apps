@@ -58,8 +58,11 @@
             }
             try{
                     let res=await axios.post(`http://localhost:3007/user/login`,obj)
-                    window.alert('User Logged in successfully!');
-                    
+                    //window.alert('User Logged in successfully!');
+                    if(res.data=='User logged in successfully!')
+                      {
+                        window.location.href = 'expense.html';
+                      }
                     
                 }
             catch(err){

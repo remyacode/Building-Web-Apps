@@ -9,5 +9,6 @@ const sequelize=require('./util/database');
 app.use(bodyParser.json());     //why .json() ?!
 app.use(cors());
 app.use(expRoute);
+
 sequelize.sync();
 app.listen(3007);

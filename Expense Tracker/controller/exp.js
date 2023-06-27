@@ -47,6 +47,7 @@ exports.OnLogin=(req,res,next)=>{
                 //console.log(res)
                 if(resp===true){
                     res.status(200).send('User logged in successfully!')
+                    //res.status(201).json({message:'Successfully created new user'})
                 }
                 else{
                     console.log(errp);

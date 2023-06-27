@@ -21,7 +21,7 @@ h1{
 label{
     padding-bottom: 20px;
 }
-#name,#email,#password{
+#name,#email,#password,#amt,#des,#cat{
     width: 300px;
     position: absolute;
     left: 250px;
@@ -31,4 +31,12 @@ body{
 }
 h4{
     color:red;
+}
+.delete{
+    background-color: rgb(47, 47, 241);
+    color: azure;
+}
+.edit{
+    background-color: rgb(241, 47, 47);
+    color: azure;
 }
