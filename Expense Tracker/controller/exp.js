@@ -2,6 +2,7 @@ const Exp=require('../model/exp')
 const path=require('path')
 //for password encryption
 const bcrypt=require('bcrypt')
+const jwt=require('jsonwebtoken')
 
 exports.OnSignUp=async (req,res,next)=>{
     try{
@@ -32,6 +33,10 @@ exports.OnSignUp=async (req,res,next)=>{
     
 }
 
+function generateAccessToken(id){
+    return jwt.sign({userId:id},'randomkey')
+}
+
 exports.OnLogin=(req,res,next)=>{
     const email=req.body.email;
     const password=req.body.password;
@@ -47,7 +52,7 @@ exports.OnLogin=(req,res,next)=>{
                 //console.log(res)
                 if(resp===true){
                     //res.status(200).send('User logged in successfully!')
-                    res.status(200).json({success:true, message:'User logged in successfully!',user:edata})
+                    res.status(200).json({success:true, message:'User logged in successfully!',token:generateAccessToken(edata.id),user:edata})
                 }
                 else{
                     console.log(errp);

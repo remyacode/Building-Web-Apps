@@ -61,6 +61,8 @@
                     let res=await axios.post(`http://localhost:3007/user/login`,obj)
                     //window.alert('User Logged in successfully!');
                     //console.log(res.data.user)
+                    localStorage.setItem('token',res.data.token)
+                    
                     if(res.data.message=='User logged in successfully!')
                       {
                         const queryString = new URLSearchParams(res.data.user).toString();

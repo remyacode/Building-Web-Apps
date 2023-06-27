@@ -11,7 +11,7 @@
   </head>
   <body>
     <div class="container-lg">
-    <header>
+    <header id="heading">
         <h1>Expense Tracker</h1>
     </header>
     </div>
@@ -58,8 +58,10 @@
         var editid=0;
   
         const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id');
-        console.log(userId);
+        const username = urlParams.get('name');
+        //console.log(username);
+        const heading=document.getElementById('heading');
+        heading.innerHTML=`<h1>${username}'s Expense Tracker<h1>`;
 
 
         async function domfunction(event){
@@ -77,13 +79,13 @@
             try{
                 if(editid!=0)
                 {
-                    let res=await axios.put(`http://localhost:3007/${userId}/editExp/${editid}`,obj)
+                    let res=await axios.put(`http://localhost:3007/user/editExp/${editid}`,obj)
                     console.log(editid)
                     editid=0;
                     showNewExpenseOnScreen(res.data);
                 }
                 else{
-                    let res=await axios.post(`http://localhost:3007/${userId}/add-to-expense`,obj)
+                    let res=await axios.post(`http://localhost:3007/user/add-to-expense`,obj)
                     showNewExpenseOnScreen(res.data)
                 }
             }
@@ -95,8 +97,8 @@
 
         window.addEventListener("DOMContentLoaded",async function load(){
             try{
-               
-                let resp= await axios.get(`http://localhost:3007/${userId}/frontpage`);
+               const token=localStorage.getItem('token')
+                let resp= await axios.get(`http://localhost:3007/user/frontpage`,{headers:{"Authorization":token}})
                 for(let i=0;i<resp.data.length;i++){
                     showNewExpenseOnScreen(resp.data[i])
                 }
@@ -136,7 +138,7 @@
 
         async function deleteDB(id){
             try{
-                let res=await axios.delete(`http://localhost:3007/${userId}/deleteExp/${id}`)
+                let res=await axios.delete(`http://localhost:3007/user/deleteExp/${id}`)
             }
             catch(err){
                 console.log(err)
