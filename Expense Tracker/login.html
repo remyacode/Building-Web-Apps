@@ -45,6 +45,7 @@
 
             const email=event.target.email.value;
             const password=event.target.password.value;
+            
 
             const errm=document.getElementById('errorMessage')
 
@@ -59,9 +60,12 @@
             try{
                     let res=await axios.post(`http://localhost:3007/user/login`,obj)
                     //window.alert('User Logged in successfully!');
-                    if(res.data=='User logged in successfully!')
+                    //console.log(res.data.user)
+                    if(res.data.message=='User logged in successfully!')
                       {
-                        window.location.href = 'expense.html';
+                        const queryString = new URLSearchParams(res.data.user).toString();
+                        console.log(queryString)
+                        window.location.href = `expense.html?${queryString}`;
                       }
                     
                 }

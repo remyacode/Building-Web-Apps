@@ -49,6 +49,7 @@
       
         <button class="btn submit" type="submit">Add Expense</button>
       </form>
+      <a href="login.html">Logout</a>
       <ul id="users"></ul>
     </section>
     </div>
@@ -56,6 +57,10 @@
     <script>
         var editid=0;
   
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id');
+        console.log(userId);
+
 
         async function domfunction(event){
             event.preventDefault(); //to prevent defaults like reload
@@ -72,13 +77,13 @@
             try{
                 if(editid!=0)
                 {
-                    let res=await axios.put(`http://localhost:3007/user/editExp/${editid}`,obj)
+                    let res=await axios.put(`http://localhost:3007/${userId}/editExp/${editid}`,obj)
                     console.log(editid)
                     editid=0;
                     showNewExpenseOnScreen(res.data);
                 }
                 else{
-                    let res=await axios.post(`http://localhost:3007/user/add-to-expense`,obj)
+                    let res=await axios.post(`http://localhost:3007/${userId}/add-to-expense`,obj)
                     showNewExpenseOnScreen(res.data)
                 }
             }
@@ -90,7 +95,8 @@
 
         window.addEventListener("DOMContentLoaded",async function load(){
             try{
-                let resp= await axios.get("http://localhost:3007/user/frontpage");
+               
+                let resp= await axios.get(`http://localhost:3007/${userId}/frontpage`);
                 for(let i=0;i<resp.data.length;i++){
                     showNewExpenseOnScreen(resp.data[i])
                 }
@@ -130,7 +136,7 @@
 
         async function deleteDB(id){
             try{
-                let res=await axios.delete(`http://localhost:3007/user/deleteExp/${id}`)
+                let res=await axios.delete(`http://localhost:3007/${userId}/deleteExp/${id}`)
             }
             catch(err){
                 console.log(err)

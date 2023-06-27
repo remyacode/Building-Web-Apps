@@ -46,8 +46,8 @@ exports.OnLogin=(req,res,next)=>{
             bcrypt.compare(password,edata.password,(errp,resp)=>{
                 //console.log(res)
                 if(resp===true){
-                    res.status(200).send('User logged in successfully!')
-                    //res.status(201).json({message:'Successfully created new user'})
+                    //res.status(200).send('User logged in successfully!')
+                    res.status(200).json({success:true, message:'User logged in successfully!',user:edata})
                 }
                 else{
                     console.log(errp);

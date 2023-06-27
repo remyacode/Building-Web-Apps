@@ -1,6 +1,8 @@
 const User=require('../model/user')
 
+
 exports.addtoexpense=(req,res,next)=>{
+    const userId=req.params.userId;
     const amt=req.body.amt;
     const des=req.body.des;
     const cat=req.body.cat;
@@ -8,15 +10,19 @@ exports.addtoexpense=(req,res,next)=>{
     User.create({
         amt:amt,
         des:des,
-        cat:cat
+        cat:cat,
+        userId:userId
     })
     .then(result=>res.status(200).json((result)))
     .catch(err=>console.log(err))
 }
 
 exports.frontpage=async(req,res,next)=>{
+    const userId=req.params.userId;
     try{
-        let result=await User.findAll();
+        let result=await User.findAll({where: {
+            userId: userId
+          }});
         res.status(200).json(result);
     }
     catch(err){
