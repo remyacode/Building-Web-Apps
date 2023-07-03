@@ -29,14 +29,19 @@ label{
 body{
     background-color: rgb(233, 228, 159);
 }
+.premium{
+    float: right;
+    width: auto;
+}
 h4{
     color:red;
 }
-.delete{
+.edit{
     background-color: rgb(47, 47, 241);
     color: azure;
 }
-.edit{
+.delete{
     background-color: rgb(241, 47, 47);
     color: azure;
+    
 }

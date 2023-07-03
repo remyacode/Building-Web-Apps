@@ -19,6 +19,7 @@ exports.addtoexpense=(req,res,next)=>{
 
 exports.frontpage=async(req,res,next)=>{
     //const userId=req.params.userId;
+    console.log(req.header.token)
     try{
         let result=await User.findAll(
          {where: {userId: req.user.id}}
