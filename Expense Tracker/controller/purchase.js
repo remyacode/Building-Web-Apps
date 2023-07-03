@@ -8,8 +8,8 @@ exports.purchasepremium=async(req,res)=>{
             //key_id: process.env.RAZORPAY_KEY_ID,
             //key_secret: process.env.RAZORPAY_KEY_SECRET
 
-            key_id: 'rzp_test_qVSFJteYfOcm9w',
-            key_secret: 'k6O1dRiwwAMhw5niMO5IiRPi'
+            key_id: '',
+            key_secret: ''
        })
        
        const amount=2500;
