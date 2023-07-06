@@ -5,5 +5,6 @@ const purchaseController=require('../controller/purchase')
 const userauthenticate=require('../middleware/auth')
 
 router.get('/purchase/premiummembership',userauthenticate.authenticate,purchaseController.purchasepremium)
-//router.post('/updatetransactionstatus',userauthenticate.authenticate,purchaseController.updatetransactionstatus)
+router.post('/updatetransactionstatus',userauthenticate.authenticate,purchaseController.updatetransactionstatus)
+//router.get('/transactionstatus',purchaseController.transactionstatus)
 module.exports=router

@@ -1,17 +1,19 @@
 const User=require('../model/user')
+const Exp=require('../model/exp')
 
 
 exports.addtoexpense=(req,res,next)=>{
     //const userId=req.params.userId;
+    //console.log(req.user.id)
     const amt=req.body.amt;
     const des=req.body.des;
     const cat=req.body.cat;
-
+    
     User.create({
         amt:amt,
         des:des,
-        cat:cat
-       // userId:userId
+        cat:cat,
+        userId:req.user.id
     })
     .then(result=>res.status(200).json((result)))
     .catch(err=>console.log(err))
@@ -19,12 +21,17 @@ exports.addtoexpense=(req,res,next)=>{
 
 exports.frontpage=async(req,res,next)=>{
     //const userId=req.params.userId;
-    console.log(req.header.token)
+    //console.log(req.user.id)
     try{
         let result=await User.findAll(
-         {where: {userId: req.user.id}}
+        {where: {userId: req.user.id}}
             );
-        res.status(200).json(result);
+            //console.log(result)
+            let result1=await Exp.findAll(
+               {where: {id: req.user.id}}
+                   );
+        const stat=result1[0].dataValues.ispremiumuser;
+        res.status(200).json({result:result,stat:stat});
     }
     catch(err){
         console.log(err);

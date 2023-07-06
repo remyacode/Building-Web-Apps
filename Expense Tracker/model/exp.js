@@ -25,6 +25,7 @@ password:{
     type:Sequelize.STRING,
     allowNull:false,
     unique:false
-}
+},
+ispremiumuser: Sequelize.BOOLEAN
 })
 module.exports=Exp
