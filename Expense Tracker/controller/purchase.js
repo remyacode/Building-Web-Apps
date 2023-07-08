@@ -1,6 +1,7 @@
 const Razorpay=require('razorpay')
 const Order=require('../model/order')
 const User=require('../model/exp')
+const Exp=require('../model/user')
 
 exports.purchasepremium=async(req,res)=>{
     //console.log(req.user)
@@ -44,6 +45,7 @@ exports.purchasepremium=async(req,res)=>{
     catch(err){
         //console.log(process.env.RAZORPAY_KEY_SECRET)
         console.log(err);
+        Order.create({orderid:req.body.order_id,status:'FAILED'})
         res.status(403).json({message:'Something went wrong',error:err})
     }
 }
@@ -60,38 +62,56 @@ exports.updatetransactionstatus=(req,res)=>{
                     
                     return res.status(202).json({success:true,message:"Transaction Successfull"});
                 }).catch((err)=>{
+                    
                     throw new Error(err);
+                    
                 })
             }).catch((err)=>{
+                
+                
                 throw new Error(err)
+                
             })
         }).catch(err=>{
-            throw new Error(err)
+                        throw new Error(err)
+            
         })
     }
     catch(err){
-        Order.findOne({where:{orderid:order_id}})
-        .then(order=>{
-        order.update({paymentid:payment_id,status:'FAILED'})
-            .then(()=>{
-                req.user.update({ispremiumuser:false})
-                .then(()=>{
-                    
-                    return res.status(401).json({success:false,message:"Transaction Failed"});
-                })})})
+       
         console.log(err)
     }
 }
-/*
-exports.transactionstatus=(req,res)=>{
-    //User.findOne({where:{id:}})
+exports.leaderboard=async (req,res)=>{
+    try{
+        let result=await User.findAll()
+        
+        var lb=[];
 
-    if(User.ispremiumuser){
-        res.status(202).json({success:true,message:"Premium User"})
+        for(let i=0;i<result.length;i++){
+            var uid=result[i].dataValues.id;
+            var name=result[i].dataValues.name;
+            var result1=await Exp.findAll({where:{userId:uid}})
+            //console.log(result1)
+            var totexp=0;
+            for(let j=0;j<result1.length;j++){
+                totexp+=result1[j].dataValues.amt;
+            }
+
+           var obj={
+            "name":name,
+            "totexp":totexp
+           }
+
+           lb.push(obj);
+        }
+
+        //console.log(lb)
+
+        res.status(200).json({lb:lb});
     }
-    else{
-        res.status(202).json({success:false,message:"Not Premium User"})
+    catch(err){
+        console.log(err);
     }
 }
-*/
 

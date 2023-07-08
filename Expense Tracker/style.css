@@ -12,6 +12,9 @@ h1{
     width:150px;
     padding-bottom: 10px;
 }
+.logout{
+    padding-top: 5%;
+}
 .btn :hover{
     background-color: white;
 }
@@ -29,8 +32,29 @@ label{
 h5{
     color:green;
 }
+.lb{
+    color: black;
+}
+.lbtn{
+    background-color: rgb(212, 79, 79);
+    color: white;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.lbh{
+    color: brown;
+    
+}
+#ldbrd{
+    background-color: rgb(255, 255, 255,0.4);
+    padding: 2%;
+    width: 25%;
+}
 body{
     background-color: rgb(233, 228, 159);
+}
+#users{
+    margin-top: 2%;
 }
 .premium{
     float: right;
