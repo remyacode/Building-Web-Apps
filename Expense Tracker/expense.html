@@ -52,7 +52,7 @@
       
       <ul id="users"></ul>
 
-      
+
       <div id="prbtn">
       <button id="rzp-button1" class="btn premium">Buy Premium Membership</button>
       </div>
@@ -141,15 +141,17 @@
 
         async function leaderboard(){
             let resp =await axios.get(`http://localhost:3007/premium/leaderboard`);
-            //console.log(resp.data.lb)
+            console.log(resp.data)
 
             const lbbtn=document.getElementById('ldbrd');
             lbbtn.innerHTML='<h3 class="lbh">Leaderboard</h3><br>';
             
-
-            for(let i=0;i<resp.data.lb.length;i++){
-                lbbtn.innerHTML=lbbtn.innerHTML+`<h6>${i+1}. Name: ${resp.data.lb[i].name}  Total-Expense: ${resp.data.lb[i].totexp}</h6>`
+            
+            
+            for(let i=0;i<resp.data.length;i++){
+                lbbtn.innerHTML=lbbtn.innerHTML+`<h6>${i+1}. Name: ${resp.data[i].name}  Total-Expense: ${resp.data[i].totexp}</h6>`
             }
+            
             
         }
         

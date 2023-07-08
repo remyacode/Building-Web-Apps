@@ -2,6 +2,7 @@ const Razorpay=require('razorpay')
 const Order=require('../model/order')
 const User=require('../model/exp')
 const Exp=require('../model/user')
+const sequelize = require('../util/database')
 
 exports.purchasepremium=async(req,res)=>{
     //console.log(req.user)
@@ -84,14 +85,33 @@ exports.updatetransactionstatus=(req,res)=>{
 }
 exports.leaderboard=async (req,res)=>{
     try{
-        let result=await User.findAll()
+        //optimize-take only needed attributes
+        let result=await User.findAll({attributes:['id','name',[sequelize.fn('sum', sequelize.col('expenses.amt')), 'totexp']],
+        include:[
+            {
+                model: Exp,
+                attributes:[]
+            }
+
+        ],
+        group:['users.id'],
+        order:[['totexp','DESC']]
+    })
+    /*
+        let result1 = await Exp.findAll({
+            attributes: [
+              'userId',
+              [sequelize.fn('sum', sequelize.col('expenses.amt')), 'totexp']
+            ],
+            group: ['userId']
+          });
         
         var lb=[];
 
         for(let i=0;i<result.length;i++){
             var uid=result[i].dataValues.id;
             var name=result[i].dataValues.name;
-            var result1=await Exp.findAll({where:{userId:uid}})
+            var result1=await Exp.findAll({where:{userId:uid},attributes:['amt']})
             //console.log(result1)
             var totexp=0;
             for(let j=0;j<result1.length;j++){
@@ -105,10 +125,21 @@ exports.leaderboard=async (req,res)=>{
 
            lb.push(obj);
         }
-
+        /////////////////////////////////////////////////////////////////
         //console.log(lb)
+       
+        var userLeaderBoardDEtails=[];
+        result.forEach((user)=>{
+            //console.log(user.name)
+            userLeaderBoardDEtails.push({name:user.name,totexp:result1[user.id] || 0})
+        })
+        //to sort in descending order
+        //userLeaderBoardDEtails.sort((a, b) => b.totexp - a.totexp);
 
-        res.status(200).json({lb:lb});
+        console.log(result1)
+        */
+
+        res.status(200).json(result);
     }
     catch(err){
         console.log(err);
