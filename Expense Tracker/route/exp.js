@@ -8,6 +8,7 @@ const exp = require("constants");
 
 router.post('/signup',expController.OnSignUp)
 router.post('/user/login',expController.OnLogin)
+router.post('/password/forgotpassword',expController.passreset)
 
 router.get('/user/frontpage',userauthenticate.authenticate,userController.frontpage)
 router.post('/user/add-to-expense',userauthenticate.authenticate,userController.addtoexpense)

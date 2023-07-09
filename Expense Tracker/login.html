@@ -32,6 +32,9 @@
         </div>
         <button class="btn submit" type="submit">Login</button>
       </form>
+      <div id="forgotpass">
+        <button id="fp" class="btn fpbtn" onclick=forgpas()>Forgot Password? Click here!</button>
+      </div>
       <a href="signup.html">Sign Up for new User</a>
       <div id="errorMessage"></div>
     </section>
@@ -51,7 +54,8 @@
 
             if (password.trim() === '' || email.trim() === '') {
             // Display error message
-            window.alert('Email and password are mandatory fields.');}
+            window.alert('Email and password are mandatory fields.');
+          }
             else{
             const obj={
                 email,
@@ -87,6 +91,47 @@
                 console.log(err);
             }
         }
+
+        }
+
+        async function forgpas(){
+
+              const forp=document.getElementById('forgotpass')
+
+              forp.innerHTML=`
+              <form id="my-form" onsubmit="emailfn(event)">
+
+                          <div>       
+                              <label for="emailfp">Email: </label>
+                              <input type="text" id="emailfp" class="col-5">
+                          </div>
+
+
+                <button class="btn prl" type="submit">Send password reset link</button>
+              </form>`
+
+
+             
+            }
+
+        async function emailfn(event){
+          event.preventDefault(); 
+          const nemail=event.target.emailfp.value;
+          const obj={
+            nemail,
+          }
+        
+          let resp =await axios.post(`http://localhost:3007/password/forgotpassword`,obj);
+
+          const forp=document.getElementById('forgotpass')
+
+              forp.innerHTML=`
+
+
+                          <div>       
+                              <h4>Password reset successful!</h4>
+                          </div>`
+
 
         }
 

@@ -79,3 +79,40 @@ exports.OnLogin=(req,res,next)=>{
     })
     .catch(err=>console.log(err))
 }
+
+
+const sib=require('sib-api-v3-sdk')
+require('dotenv').config()
+
+exports.passreset=(req,res,next)=>{
+    //console.log('the email to be used is====',req.body.nemail);
+
+    const client=sib.ApiClient.instance
+
+
+    const apiKey=client.authentications['api-key']
+    apiKey.apiKey=process.env.API_KEY
+
+    const tranEmailApi= new sib.TransactionalEmailsApi()
+
+    const sender={
+        email:'remyacnair710@gmail.com',
+        name: 'Expense Tracker Admin'
+    }
+
+    const receiver=[
+        {
+            email: req.body.nemail,
+        },
+    ]
+
+    tranEmailApi.sendTransacEmail({
+        sender,
+        to:receiver,
+        subject: 'Reset Password for Expense Tracker',
+        textContent:`This mail is to reset password for expense tracker!`
+        //htmlContent:
+
+    }).then(res.status(201).json({message:'Successfully reset password'}))
+    .catch(err=>console.log(err))
+}
