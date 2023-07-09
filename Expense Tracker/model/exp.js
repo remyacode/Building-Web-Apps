@@ -26,6 +26,10 @@ password:{
     allowNull:false,
     unique:false
 },
-ispremiumuser: Sequelize.BOOLEAN
+ispremiumuser: Sequelize.BOOLEAN,
+totExp: {
+    type:Sequelize.INTEGER,
+    defaultValue:0,
+}
 })
 module.exports=Exp

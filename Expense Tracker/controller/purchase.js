@@ -53,6 +53,7 @@ exports.purchasepremium=async(req,res)=>{
 
 exports.updatetransactionstatus=(req,res)=>{
     try{
+        
         const { payment_id, order_id}=req.body;
         Order.findOne({where:{orderid:order_id}})
         .then(order=>{
@@ -85,7 +86,10 @@ exports.updatetransactionstatus=(req,res)=>{
 }
 exports.leaderboard=async (req,res)=>{
     try{
-        //optimize-take only needed attributes
+
+        
+        /*//////////////////TABLE JOIN////////////////////////////////////////////////////////
+        //optimize-take only needed attributes and join tables through userid and order in DESC order
         let result=await User.findAll({attributes:['id','name',[sequelize.fn('sum', sequelize.col('expenses.amt')), 'totexp']],
         include:[
             {
@@ -96,7 +100,8 @@ exports.leaderboard=async (req,res)=>{
         ],
         group:['users.id'],
         order:[['totexp','DESC']]
-    })
+        })
+        */
     /*
         let result1 = await Exp.findAll({
             attributes: [
@@ -139,6 +144,12 @@ exports.leaderboard=async (req,res)=>{
         console.log(result1)
         */
 
+        //////////////////totExp column introduced
+
+        let result=await User.findAll({attributes:['id','name','totExp'],
+        order:[['totExp','DESC']]
+        })
+        //console.log(result)
         res.status(200).json(result);
     }
     catch(err){
