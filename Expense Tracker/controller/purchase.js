@@ -51,36 +51,38 @@ exports.purchasepremium=async(req,res)=>{
     }
 }
 
-exports.updatetransactionstatus=(req,res)=>{
+exports.updatetransactionstatus=async (req,res)=>{
     try{
-        
+        const t=await sequelize.transaction();
         const { payment_id, order_id}=req.body;
         Order.findOne({where:{orderid:order_id}})
         .then(order=>{
-            order.update({paymentid:payment_id,status:'SUCCESSFUL'})
-            .then(()=>{
-                req.user.update({ispremiumuser:true})
-                .then(()=>{
-                    
+            order.update({paymentid:payment_id,status:'SUCCESSFUL'},{transaction:t})
+            .then(async ()=>{
+                //await t.commit()
+                req.user.update({ispremiumuser:true},{transaction:t})
+                .then(async ()=>{
+                    await t.commit()
                     return res.status(202).json({success:true,message:"Transaction Successfull"});
-                }).catch((err)=>{
-                    
+                }).catch(async (err)=>{
+                    //t.rollback()
                     throw new Error(err);
                     
                 })
-            }).catch((err)=>{
+            }).catch(async (err)=>{
                 
-                
+                //t.rollback()
                 throw new Error(err)
                 
             })
-        }).catch(err=>{
+        }).catch(async (err)=>{
+           // t.rollback()
                         throw new Error(err)
             
         })
     }
     catch(err){
-       
+        t.rollback()
         console.log(err)
     }
 }
