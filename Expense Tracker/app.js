@@ -12,6 +12,7 @@ const purchRoute=require('./route/purchase')
 const User=require('./model/exp')
 const Exp=require('./model/user');
 const Order = require('./model/order');
+const Fp = require('./model/fp');
 
 app.use(bodyParser.json());     //why .json() ?!
 app.use(cors());
@@ -24,6 +25,10 @@ Exp.belongsTo(User);
 
 User.hasMany(Order);
 Order.belongsTo(User);
+
+User.hasMany(Fp);
+Fp.belongsTo(User);
+
 
 sequelize.sync()
 .then(()=>{

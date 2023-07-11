@@ -1,8 +1,10 @@
 const Exp=require('../model/exp')
-const path=require('path')
+const Fp = require('../model/fp');
+
 //for password encryption
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
+const path=require('path')
 
 exports.OnSignUp=async (req,res,next)=>{
     try{
@@ -84,8 +86,15 @@ exports.OnLogin=(req,res,next)=>{
 const sib=require('sib-api-v3-sdk')
 require('dotenv').config()
 
-exports.passreset=(req,res,next)=>{
+const { v4: uuidv4 } = require('uuid');
+
+exports.passreset=async (req,res,next)=>{
     //console.log('the email to be used is====',req.body.nemail);
+    const uuid = uuidv4();
+    //console.log('passreset uuid=========================',uuid)
+    let result= await Exp.findOne({where:{email:req.body.nemail}});
+    await Fp.create({id:uuid,isactive:true,userId:result.dataValues.id})
+    //console.log('result----------fp----',result.dataValues.id)
 
     const client=sib.ApiClient.instance
 
@@ -110,9 +119,71 @@ exports.passreset=(req,res,next)=>{
         sender,
         to:receiver,
         subject: 'Reset Password for Expense Tracker',
-        textContent:`This mail is to reset password for expense tracker!`
-        //htmlContent:
+        htmlContent:
+        `${uuid}
+        <form id="resetPasswordForm" action="file:///home/remya-c/Desktop/Sharpener%20Tasks/Web%20Apps/Expense%20Tracker/rpf.html" method="POST">
+        <input type="hidden" name="uuid" value=\`${uuid}\`>
+          <button type="submit">Click to reset Password</button>
+        </form>`
+        /*
+        `<html>
+        <body>
+        <p>This mail is to reset password for the Expense Tracker!</p>
+        <a href=\`http://localhost:3007/password/resetpasswordform/${uuid}\` method='POST'>Click here to reset your password</a>
 
-    }).then(res.status(201).json({message:'Successfully reset password'}))
+                    </body>
+                    </html>
+        `
+        */
+        //`<a href="/rpl.html?uuid=${uuid}">Link to reset Password!</a>`
+        //<button id="prle" class="btn prle" onclick="showResetPasswordForm('${uuid}')">Reset password link!</button>
+
+
+    }).then(res.status(201).json({message:'Successfully sent mail!'}))
     .catch(err=>console.log(err))
 }
+
+exports.resetlinksubmit=async (req,res,next)=>{
+    const uuid = req.body.uuid;
+    //console.log('requestttt',req.body)
+    const newpassword=req.body.pass;
+    //console.log(uuid)
+    let result= await Fp.findOne({where:{isactive:true}});
+    //console.log('result isssssssssssssssssss',result)
+    const userid=result.dataValues.userId;
+    console.log(userid)
+
+    bcrypt.hash(newpassword,10,async (err,hash)=>{
+        console.log(err)
+     //   await Exp.update({
+    //     password:hash},{where:{id:userid},transaction:t})
+        await Exp.findByPk(userid)
+            .then((data)=>{
+                //console.log(data.email,'dataemaillllllllllll')
+                data.password=hash;
+             return data.save();
+             })
+        //  })
+       //     })
+      .then(async (data)=>{
+        //await t.commit();
+        //console.log(newpassword,'hashhhhhhhhhhh',data)
+        const sample=await Fp.update({isactive:false},{where:{isactive:true}})
+        //console.log(sample)
+        res.status(201).json({message:'Successfully updated password',success:true})
+      }).catch(async (err)=>{
+        console.log(err)
+        //await t.rollback()
+      })
+    })
+
+
+}
+/*
+
+exports.resetform=(req,res,next)=>{
+    const uuid=req.params.uuid;
+    res.sendFile(path.join(__dirname,'../rpf.html'),{ uuid })
+}
+
+*/
