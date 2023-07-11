@@ -62,6 +62,9 @@
       <div id="ldbrd" class="lb">
 
       </div>
+      <div id="rpt" class="rpt">
+
+      </div>
       
       <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       
@@ -135,7 +138,9 @@
 
         function premiumuser(){
             const prbtn=document.getElementById('prbtn');
-            prbtn.innerHTML='<h5>You are now a Premium User!</h5><button id="lb" class="btn lbtn" onclick=leaderboard()>Show Leaderboard</button>'
+            prbtn.innerHTML=`<h5>You are now a Premium User!</h5><button id="lb" class="btn lbtn" onclick=leaderboard()>Show Leaderboard</button>
+            <button id="rp" class="btn rp" onclick=rpg()>Show Report</button>
+            `
 
         }
 
@@ -153,6 +158,12 @@
             }
             
             
+        }
+
+        async function rpg(){
+            const lbbtn=document.getElementById('rpt');
+            lbbtn.innerHTML='<a href="rpt.html" id="rpt">Click to view Report</a>';
+
         }
         
         //Show new order on Screen
