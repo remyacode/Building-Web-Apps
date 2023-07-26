@@ -37,11 +37,12 @@ h5{
 .lb{
     color: black;
 }
-.lbtn{
+.lbtn,.rp{
     background-color: rgb(212, 79, 79);
     color: white;
     margin-top: 2%;
     margin-bottom: 2%;
+    
 }
 .lbh{
     color: brown;

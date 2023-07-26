@@ -31,14 +31,14 @@ exports.addtoexpense=async (req,res,next)=>{
         else{ totamt =parseInt(totamtatt.totExp,10)+parseInt(amt,10);
         //console.log('notnull-------------',totamt)
         }
-    
+        
     //    totamt =parseInt(totamtatt.totExp,10)+parseInt(amt,10)
         await Exp.update({totExp:totamt},{where:{id:result.dataValues.userId},transaction:t})
         await t.commit()
         let rest=await Exp.findOne({where:{id:result.dataValues.userId}})
             //console.log('rest==============',rest.dataValues)
             //console.log('result------------',result.dataValues)
-        res.status(200).json((result))
+        res.status(200).json(result)
             
     })
     .catch(async (err)=>{
@@ -50,9 +50,9 @@ exports.frontpage=async(req,res,next)=>{
     //const userId=req.params.userId;
     //console.log(req.user.id)
     try{
-        
+        var page=1;
         let rest=await Exp.findOne({where:{id:req.user.id}})
-            console.log('rest//////////==============',rest.dataValues)
+            //console.log('rest//////////==============',rest.dataValues)
             
         let result=await User.findAll(
         {where: {userId: req.user.id}}
@@ -62,7 +62,7 @@ exports.frontpage=async(req,res,next)=>{
                {where: {id: req.user.id}}
                    );
         const stat=result1[0].dataValues.ispremiumuser;
-        res.status(200).json({result:result,stat:stat});
+        res.status(200).json({result:result,stat:stat,page:page});
     }
     catch(err){
         console.log(err);

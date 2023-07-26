@@ -52,6 +52,10 @@
       
       <ul id="users"></ul>
 
+      <div id="pgno">
+
+      </div>
+
 
       <div id="prbtn">
       <button id="rzp-button1" class="btn premium">Buy Premium Membership</button>
@@ -120,14 +124,26 @@
             try{
                const token=localStorage.getItem('token')
                 let resp= await axios.get(`http://localhost:3007/user/frontpage`,{headers:{"Authorization":token}})
-                //console.log(resp.data.result[0])
-                for(let i=0;i<resp.data.result.length;i++){
-                    //console.log(resp.data.result[i])
-                    showNewExpenseOnScreen(resp.data.result[i])
-                }
+                //console.log(resp.data.result)
+                //console.log(resp.data.page)
+                //for(let i=0;i<resp.data.result.length;i++){
                 if(resp.data.stat){
                     premiumuser();
                 }
+                for(let i=0;i<resp.data.result.length;i++){
+                    //console.log(resp.data.result[i])
+                    showNewExpenseOnScreen(resp.data.result[i])
+                 }
+                pagination(resp.data.result.length,resp.data.result)
+  
+
+             //   showNewExpenseOnScreen(j*{1,2,3}+(j-1)-1)
+      
+      //       for(let i=0;i<resp.data.result.length;i++){
+        //            //console.log(resp.data.result[i])
+          //          showNewExpenseOnScreen(resp.data.result[i])
+            //    }
+                
                 //let resp1=await axios.get(`http://localhost:3007/transactionstatus`);
                 //console.log(resp1.data.success)
             }
@@ -136,6 +152,52 @@
             }
         })
 
+let currentPage = 1; // Variable to keep track of the current page
+let rsData = null; // Global variable to store the data for pagination
+
+function pagination(tpgs, rs) {
+  var pgs = Math.ceil(tpgs / 10); // Calculate the total number of pages
+  var pgnoContainer = document.getElementById('pgno');
+  // Clear the container before adding new page numbers
+  pgnoContainer.innerHTML = '';
+
+  // Store the data in the global variable for pagination
+  rsData = rs;
+
+  // Display the elements for the current page
+  //displayPageElements(currentPage);
+
+  for (let j = 1; j <= pgs; j++) {
+    pgnoContainer.innerHTML += `<button class="pgn" onclick="changePage(${j})">${j}</button>`;
+  }
+}
+
+function displayPageElements(pageNo) {
+    var pgsContainer = document.getElementById('users');
+  // Clear the container before adding new page numbers
+  pgsContainer.innerHTML = '';
+  const startIndex = (pageNo - 1) * 10;
+  const endIndex = Math.min(startIndex + 10, rsData.length);
+
+  // Clear existing displayed elements
+  // Add your code here to clear the screen if required
+
+  // Display the elements for the current page
+  for (let i = startIndex; i < endIndex; i++) {
+    if (rsData[i]) {
+      showNewExpenseOnScreen(rsData[i]);
+    }
+  }
+}
+
+function changePage(pageNo) {
+  currentPage = pageNo; // Update the current page
+
+  // Call the function to display elements for the selected page
+  displayPageElements(currentPage);
+}
+
+        
         function premiumuser(){
             const prbtn=document.getElementById('prbtn');
             prbtn.innerHTML=`<h5>You are now a Premium User!</h5><button id="lb" class="btn lbtn" onclick=leaderboard()>Show Leaderboard</button>
