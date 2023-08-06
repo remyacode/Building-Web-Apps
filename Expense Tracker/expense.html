@@ -50,7 +50,24 @@
         <button class="btn submit" type="submit">Add Expense</button>
       </form>
       
-      <ul id="users"></ul>
+      <ul id="users">
+
+      
+
+      <form onsubmit="domfunction2(event)">
+
+        <div>
+          <label for="x">Expense per page: </label>
+          <input type="number" id="x"  class="col-4">
+        </div>
+
+      
+        <button class="btn submit" type="submit">Show Expenses</button>
+      </form>
+
+ 
+
+      </ul>
 
       <div id="pgno">
 
@@ -119,10 +136,19 @@
             }
 
         }
+        async function domfunction2(event){
+            event.preventDefault(); //to prevent defaults like reload
+             
+            const x=event.target.x.value;
+            localStorage.setItem('epp',x)
+        }
 
         window.addEventListener("DOMContentLoaded",async function load(){
             try{
                const token=localStorage.getItem('token')
+               
+               
+               
                 let resp= await axios.get(`http://localhost:3007/user/frontpage`,{headers:{"Authorization":token}})
                 //console.log(resp.data.result)
                 //console.log(resp.data.page)
@@ -130,11 +156,12 @@
                 if(resp.data.stat){
                     premiumuser();
                 }
-                for(let i=0;i<resp.data.result.length;i++){
+                var x= localStorage.getItem('epp');
+                for(let i=0;i<x;i++){
                     //console.log(resp.data.result[i])
                     showNewExpenseOnScreen(resp.data.result[i])
                  }
-                pagination(resp.data.result.length,resp.data.result)
+                pagination(resp.data.result.length,resp.data.result,x)
   
 
              //   showNewExpenseOnScreen(j*{1,2,3}+(j-1)-1)
@@ -155,8 +182,9 @@
 let currentPage = 1; // Variable to keep track of the current page
 let rsData = null; // Global variable to store the data for pagination
 
-function pagination(tpgs, rs) {
-  var pgs = Math.ceil(tpgs / 10); // Calculate the total number of pages
+function pagination(tpgs, rs,x) {
+
+  var pgs = Math.ceil(tpgs / x); // Calculate the total number of pages
   var pgnoContainer = document.getElementById('pgno');
   // Clear the container before adding new page numbers
   pgnoContainer.innerHTML = '';
