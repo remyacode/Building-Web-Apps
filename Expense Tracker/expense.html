@@ -120,14 +120,14 @@
             try{
                 if(editid!=0)
                 {
-                    let res=await axios.put(`http://localhost:3007/user/editExp/${editid}`,obj)
+                    let res=await axios.put(`http://localhost:${3000}/user/editExp/${editid}`,obj)
                     console.log(editid)
                     editid=0;
                     showNewExpenseOnScreen(res.data);
                 }
                 else{
                     const token=localStorage.getItem('token')
-                    let res=await axios.post(`http://localhost:3007/user/add-to-expense`,obj,{headers: {"Authorization": token}})
+                    let res=await axios.post(`http://localhost:${3000}/user/add-to-expense`,obj,{headers: {"Authorization": token}})
                     showNewExpenseOnScreen(res.data)
                 }
             }
@@ -149,7 +149,7 @@
                
                
                
-                let resp= await axios.get(`http://localhost:3007/user/frontpage`,{headers:{"Authorization":token}})
+                let resp= await axios.get(`http://localhost:${3000}/user/frontpage`,{headers:{"Authorization":token}})
                 //console.log(resp.data.result)
                 //console.log(resp.data.page)
                 //for(let i=0;i<resp.data.result.length;i++){
@@ -235,7 +235,7 @@ function changePage(pageNo) {
         }
 
         async function leaderboard(){
-            let resp =await axios.get(`http://localhost:3007/premium/leaderboard`);
+            let resp =await axios.get(`http://localhost:${3000}/premium/leaderboard`);
             //console.log(resp.data)
 
             const lbbtn=document.getElementById('ldbrd');
@@ -289,7 +289,7 @@ function changePage(pageNo) {
 
         async function deleteDB(id){
             try{
-                let res=await axios.delete(`http://localhost:3007/user/deleteExp/${id}`)
+                let res=await axios.delete(`http://localhost:${3000}/user/deleteExp/${id}`)
             }
             catch(err){
                 console.log(err)
@@ -313,14 +313,14 @@ function changePage(pageNo) {
 
         document.getElementById('rzp-button1').onclick=async function(e){
             const token =localStorage.getItem('token')
-            const response=await axios.get('http://localhost:3007/purchase/premiummembership',{headers:{"Authorization":token}})
+            const response=await axios.get(`http://localhost:${3000}/purchase/premiummembership`,{headers:{"Authorization":token}})
             console.log(response)
             var options=
             {
                 "key":response.data.key_id,
                 "order_id":response.data.order.id,
                 "handler": async function(response){
-                await axios.post('http://localhost:3007/updatetransactionstatus',{
+                await axios.post(`http://localhost:${3000}/updatetransactionstatus`,{
                     order_id:options.order_id,
                     payment_id:response.razorpay_payment_id,
             },{headers:{"Authorization":token}})

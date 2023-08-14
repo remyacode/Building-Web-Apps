@@ -62,7 +62,7 @@
                 password
             }
             try{
-                    let res=await axios.post(`http://localhost:3007/user/login`,obj)
+                    let res=await axios.post(`http://localhost:${3000}/user/login`,obj)
                     //window.alert('User Logged in successfully!');
                     //console.log(res.data.user)
                     localStorage.setItem('token',res.data.token)
@@ -121,7 +121,7 @@
             nemail,
           }
         
-          let resp =await axios.post(`http://localhost:3007/password/forgotpassword`,obj);
+          let resp =await axios.post(`http://localhost:${3000}/password/forgotpassword`,obj);
 
           const forp=document.getElementById('forgotpass')
 

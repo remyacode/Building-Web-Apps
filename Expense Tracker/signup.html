@@ -39,6 +39,7 @@
       <a href="login.html">Login for existing User</a>
 
       <div id="errorMessage"></div>
+      
       <!--
       <div class="fleft">
       <h2>Orders</h2>
@@ -53,6 +54,9 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script>
+        //axios.get('/')
+        //.then(response=>{const port=response.data.port})
+        //console.log(port)
         async function domfunction(event){
             event.preventDefault(); //to prevent defaults like reload
              
@@ -78,7 +82,7 @@
                 }
                 else{
                     */
-                    let res=await axios.post(`http://localhost:3007/signup`,obj)
+                    let res=await axios.post(`http://localhost:${3000}/signup`,obj)
                     //console.log(res.data.message)
                     if (res.data.message==='Successfully created new user') {
                     window.location.href = 'login.html';
